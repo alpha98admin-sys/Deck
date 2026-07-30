@@ -213,6 +213,11 @@
   /* ---------- Diagram / charts ---------- */
   .scrollwrap { overflow-x: auto; }
   .diagram-svg { display: block; max-width: none; }
+  .diagram-v { display: none; width: 100%; height: auto; max-width: 100%; }
+  @media (max-width: 639px) {
+    .diagram-h { display: none; }
+    .diagram-v { display: block; }
+  }
   .d-box { fill: var(--bg-card); stroke: var(--border); }
   .d-box-gold { fill: var(--bg-card); stroke: var(--gold); }
   .d-box-dash { fill: var(--bg-card); stroke: var(--border); stroke-dasharray: 4 3; }
@@ -220,6 +225,8 @@
   .d-sub { fill: var(--text-2); font-size: 11px; }
   .d-flow { stroke: var(--border); stroke-width: 1; fill: none; }
   .d-flow-dash { stroke: var(--border); stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
+  .d-flow-m { stroke: var(--border-strong); stroke-width: 1.5; fill: none; }
+  .d-flow-md { stroke: var(--border-strong); stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
   .d-kill-box { fill: rgba(240,78,69,0.08); stroke: rgba(240,78,69,0.45); }
   .d-kill-text { fill: var(--neg); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; }
 
@@ -530,7 +537,7 @@
 
       <div class="card block" style="padding:var(--s6)">
         <div class="scrollwrap">
-          <svg class="diagram-svg" width="1060" height="380" viewBox="0 0 1060 380" role="img" aria-label="System architecture: dual game-state feeds flow into a signal engine, then a decision layer requiring cross-source agreement, then a risk manager with kill switch, then an execution agent placing orders on the Kalshi API. An operations rail records ledger, monitoring, and alerts.">
+          <svg class="diagram-svg diagram-h" width="1060" height="380" viewBox="0 0 1060 380" role="img" aria-label="System architecture: dual game-state feeds plus live Kalshi market data flow into a signal engine, then a decision layer requiring cross-source agreement, then a risk manager with kill switch, then an execution agent placing orders on the Kalshi API. An operations rail records ledger, monitoring, and alerts.">
             <defs>
               <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                 <path d="M0 0 L8 4 L0 8 Z" fill="#3A4045"/>
@@ -538,8 +545,9 @@
             </defs>
 
             <!-- connectors -->
-            <path class="d-flow" d="M235 78 L268 78 L268 122 L300 122" marker-end="url(#arr)"/>
-            <path class="d-flow" d="M235 188 L268 188 L268 154 L300 154" marker-end="url(#arr)"/>
+            <path class="d-flow" d="M235 78 L268 78 L268 110 L300 110" marker-end="url(#arr)"/>
+            <path class="d-flow" d="M235 188 L268 188 L268 138 L300 138" marker-end="url(#arr)"/>
+            <path class="d-flow" d="M235 298 L268 298 L268 166 L300 166" marker-end="url(#arr)"/>
             <path class="d-flow" d="M530 138 L565 138" marker-end="url(#arr)"/>
             <path class="d-flow" d="M770 138 L830 138" marker-end="url(#arr)"/>
             <path class="d-flow" d="M930 206 L930 244 L667 244 L667 280" marker-end="url(#arr)"/>
@@ -554,6 +562,10 @@
             <rect class="d-box" x="30" y="150" width="205" height="76" rx="4"/>
             <text class="d-title" x="46" y="176">MLB Stats API</text>
             <text class="d-sub" x="46" y="196">Independent cross-check</text>
+
+            <rect class="d-box" x="30" y="260" width="205" height="76" rx="4"/>
+            <text class="d-title" x="46" y="286">Kalshi market data</text>
+            <text class="d-sub" x="46" y="306">Live order book &amp; prices</text>
 
             <!-- signal engine -->
             <rect class="d-box-gold" x="300" y="95" width="230" height="86" rx="4"/>
@@ -588,6 +600,74 @@
             <rect class="d-box-dash" x="830" y="280" width="200" height="72" rx="4"/>
             <text class="d-title" x="846" y="306">Operations rail</text>
             <text class="d-sub" x="846" y="326">Ledger &middot; Monitoring &middot; Alerts</text>
+          </svg>
+
+          <svg class="diagram-svg diagram-v" width="360" height="860" viewBox="0 0 360 860" role="img" aria-label="System architecture, vertical: low-latency game feed, MLB Stats API, and live Kalshi market data all branch into a single pipeline feeding the signal engine, then the decision layer requiring cross-source agreement, then the risk manager with kill switch, then the execution agent placing maker orders on the Kalshi exchange API. An operations rail records ledger, monitoring, and alerts.">
+            <defs>
+              <marker id="arrv" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10 Z" fill="#565D63"/>
+              </marker>
+            </defs>
+
+            <!-- tributaries: three feeds join the trunk -->
+            <path class="d-flow-m" d="M64 40 L32 40"/>
+            <path class="d-flow-m" d="M64 112 L32 112"/>
+            <path class="d-flow-m" d="M64 184 L32 184"/>
+            <!-- trunk into signal engine -->
+            <path class="d-flow-m" d="M32 40 L32 222 L180 222 L180 244" marker-end="url(#arrv)"/>
+            <!-- main chain -->
+            <path class="d-flow-m" d="M180 334 L180 354" marker-end="url(#arrv)"/>
+            <path class="d-flow-m" d="M180 436 L180 456" marker-end="url(#arrv)"/>
+            <path class="d-flow-m" d="M180 590 L180 610" marker-end="url(#arrv)"/>
+            <path class="d-flow-m" d="M180 674 L180 694" marker-end="url(#arrv)"/>
+            <path class="d-flow-md" d="M180 758 L180 782"/>
+
+            <!-- feeds (tributary boxes) -->
+            <rect class="d-box" x="64" y="10" width="286" height="60" rx="4"/>
+            <text class="d-title" x="80" y="34">Low-latency game feed</text>
+            <text class="d-sub" x="80" y="54">Paid feed &mdash; Phase 2 procurement</text>
+
+            <rect class="d-box" x="64" y="82" width="286" height="60" rx="4"/>
+            <text class="d-title" x="80" y="106">MLB Stats API</text>
+            <text class="d-sub" x="80" y="126">Independent cross-check</text>
+
+            <rect class="d-box" x="64" y="154" width="286" height="60" rx="4"/>
+            <text class="d-title" x="80" y="178">Kalshi market data</text>
+            <text class="d-sub" x="80" y="198">Live order book &amp; prices</text>
+
+            <!-- signal engine -->
+            <rect class="d-box-gold" x="10" y="250" width="340" height="84" rx="4"/>
+            <text class="d-title" x="26" y="276">Signal engine</text>
+            <text class="d-sub" x="26" y="296">Fair-value model</text>
+            <text class="d-sub" x="26" y="312">10-season priors, out-of-sample checked</text>
+
+            <!-- decision layer -->
+            <rect class="d-box" x="10" y="360" width="340" height="76" rx="4"/>
+            <text class="d-title" x="26" y="386">Decision layer</text>
+            <text class="d-sub" x="26" y="406">Cross-source agreement</text>
+            <text class="d-sub" x="26" y="422">required before any order</text>
+
+            <!-- risk manager -->
+            <rect class="d-box" x="10" y="460" width="340" height="130" rx="4"/>
+            <text class="d-title" x="26" y="486">Risk manager</text>
+            <text class="d-sub" x="26" y="506">Per-game caps</text>
+            <text class="d-sub" x="26" y="522">Daily loss limit</text>
+            <text class="d-sub" x="26" y="538">Position limits</text>
+            <rect class="d-kill-box" x="26" y="552" width="104" height="22" rx="3"/>
+            <text class="d-kill-text" x="78" y="566" text-anchor="middle">KILL SWITCH</text>
+
+            <!-- execution -->
+            <rect class="d-box" x="10" y="614" width="340" height="60" rx="4"/>
+            <text class="d-title" x="26" y="638">Execution agent</text>
+            <text class="d-sub" x="26" y="658">Maker orders &mdash; resting bids</text>
+
+            <rect class="d-box" x="10" y="698" width="340" height="60" rx="4"/>
+            <text class="d-title" x="26" y="722">Kalshi exchange API</text>
+            <text class="d-sub" x="26" y="742">CFTC-regulated venue</text>
+
+            <rect class="d-box-dash" x="10" y="786" width="340" height="60" rx="4"/>
+            <text class="d-title" x="26" y="810">Operations rail</text>
+            <text class="d-sub" x="26" y="830">Ledger &middot; Monitoring &middot; Alerts</text>
           </svg>
         </div>
         <p class="chart-caption">No order reaches the exchange without cross-source agreement and a pass from the risk manager.</p>
